@@ -1,0 +1,13 @@
+{
+    "name": "assignment01",
+    "version": "1.0.0",
+    "description": "Server to store and retrieve product information using HTTP GET and POST requests and JSON data format.",
+    "dependencies": {
+        "restify": "4.1.1",
+		"save": "2.3.0"
+
+    },
+    "author": "Reda Mehali",
+	"private": true,
+	"main": "index.js"
+}
