@@ -12,7 +12,9 @@ var restify = require('restify')
   , server = restify.createServer({ name: SERVER_NAME})
 
   server.listen(PORT, HOST, function () {
+  console.log('------------------------------------------------------')
   console.log('Server %s listening at %s', server.name, server.url)
+  console.log('------------------------------------------------------')
   console.log('Resources:')
   console.log(' /products')
   console.log(' /products/:id')  
