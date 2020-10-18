@@ -1,12 +1,12 @@
-var SERVER_NAME = 'user-api'
-var PORT = 8000;
+var SERVER_NAME = 'product-api'
+var PORT = 3009;
 var HOST = '127.0.0.1';
 
 
 var restify = require('restify')
 
-  // Get a persistence engine for the users
-  , usersSave = require('save')('users')
+  // Get a persistence engine for the products
+  , productsSave = require('save')('products')
 
   // Create the restify server
   , server = restify.createServer({ name: SERVER_NAME})
@@ -14,8 +14,8 @@ var restify = require('restify')
   server.listen(PORT, HOST, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
-  console.log(' /users')
-  console.log(' /users/:id')  
+  console.log(' /products')
+  console.log(' /products/:id')  
 })
 
 server
@@ -25,38 +25,38 @@ server
   // Maps req.body to req.params so there is no switching between them
   .use(restify.bodyParser())
 
-// Get all users in the system
-server.get('/users', function (req, res, next) {
+// Get all products in the system
+server.get('/products', function (req, res, next) {
 
   // Find every entity within the given collection
-  usersSave.find({}, function (error, users) {
+  productsSave.find({}, function (error, products) {
 
-    // Return all of the users in the system
-    res.send(users)
+    // Return all of the products in the system
+    res.send(products)
   })
 })
 
-// Get a single user by their user id
-server.get('/users/:id', function (req, res, next) {
+// Get a single product by their product id
+server.get('/products/:id', function (req, res, next) {
 
-  // Find a single user by their id within save
-  usersSave.findOne({ _id: req.params.id }, function (error, user) {
+  // Find a single product by their id within save
+  productsSave.findOne({ _id: req.params.id }, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
 
-    if (user) {
-      // Send the user if no issues
-      res.send(user)
+    if (product) {
+      // Send the product if no issues
+      res.send(product)
     } else {
-      // Send 404 header if the user doesn't exist
+      // Send 404 header if the product doesn't exist
       res.send(404)
     }
   })
 })
 
-// Create a new user
-server.post('/users', function (req, res, next) {
+// Create a new product
+server.post('/products', function (req, res, next) {
 
   // Make sure name is defined
   if (req.params.name === undefined ) {
@@ -67,24 +67,24 @@ server.post('/users', function (req, res, next) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('age must be supplied'))
   }
-  var newUser = {
+  var newProduct = {
 		name: req.params.name, 
 		age: req.params.age
 	}
 
-  // Create the user using the persistence engine
-  usersSave.create( newUser, function (error, user) {
+  // Create the products using the persistence engine
+  productsSave.create( newProduct, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
 
-    // Send the user if no issues
-    res.send(201, user)
+    // Send the product if no issues
+    res.send(201, product)
   })
 })
 
-// Update a user by their id
-server.put('/users/:id', function (req, res, next) {
+// Update a product by their id
+server.put('/products/:id', function (req, res, next) {
 
   // Make sure name is defined
   if (req.params.name === undefined ) {
@@ -96,14 +96,14 @@ server.put('/users/:id', function (req, res, next) {
     return next(new restify.InvalidArgumentError('age must be supplied'))
   }
   
-  var newUser = {
+  var newProduct = {
 		_id: req.params.id,
 		name: req.params.name, 
 		age: req.params.age
 	}
   
-  // Update the user with the persistence engine
-  usersSave.update(newUser, function (error, user) {
+  // Update the product with the persistence engine
+  productsSave.update(newProduct, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
@@ -113,11 +113,11 @@ server.put('/users/:id', function (req, res, next) {
   })
 })
 
-// Delete user with the given id
-server.del('/users/:id', function (req, res, next) {
+// Delete product with the given id
+server.del('/products/:id', function (req, res, next) {
 
-  // Delete the user with the persistence engine
-  usersSave.delete(req.params.id, function (error, user) {
+  // Delete the product with the persistence engine
+  productsSave.delete(req.params.id, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
