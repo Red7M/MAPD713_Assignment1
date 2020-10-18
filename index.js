@@ -74,7 +74,7 @@ server.post('/products', function (req, res, next) {
 		age: req.params.age
 	}
 
-  // Create the products using the persistence engine
+  // Create the product using the persistence engine
   productsSave.create( newProduct, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
