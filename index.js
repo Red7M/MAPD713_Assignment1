@@ -60,18 +60,25 @@ server.get('/products/:id', function (req, res, next) {
 // Create a new product
 server.post('/products', function (req, res, next) {
 
-  // Make sure name is defined
-  if (req.params.name === undefined ) {
+  // Make sure product is defined
+  if (req.params.product === undefined ) {
     // If there are any errors, pass them to next in the correct format
-    return next(new restify.InvalidArgumentError('name must be supplied'))
+    return next(new restify.InvalidArgumentError('product must be supplied'))
   }
-  if (req.params.age === undefined ) {
+  // Make sure price is defined
+  if (req.params.price === undefined ) {
     // If there are any errors, pass them to next in the correct format
-    return next(new restify.InvalidArgumentError('age must be supplied'))
+    return next(new restify.InvalidArgumentError('price must be supplied'))
+  }
+  // Make sure category is defined
+  if (req.params.category === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('category must be supplied'))
   }
   var newProduct = {
-		name: req.params.name, 
-		age: req.params.age
+		product: req.params.product, 
+    price: req.params.price,
+    category: req.params.category
 	}
 
   // Create the product using the persistence engine
