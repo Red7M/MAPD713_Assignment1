@@ -79,37 +79,7 @@ server.post('/products', function (req, res, next) {
   })
 })
 
-// Update a product by their id
-server.put('/products/:id', function (req, res, next) {
-
-  // Make sure name is defined
-  if (req.params.name === undefined ) {
-    // If there are any errors, pass them to next in the correct format
-    return next(new restify.InvalidArgumentError('name must be supplied'))
-  }
-  if (req.params.age === undefined ) {
-    // If there are any errors, pass them to next in the correct format
-    return next(new restify.InvalidArgumentError('age must be supplied'))
-  }
-  
-  var newProduct = {
-		_id: req.params.id,
-		name: req.params.name, 
-		age: req.params.age
-	}
-  
-  // Update the product with the persistence engine
-  productsSave.update(newProduct, function (error, product) {
-
-    // If there are any errors, pass them to next in the correct format
-    if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-
-    // Send a 200 OK response
-    res.send(200)
-  })
-})
-
-// Delete product with the given id
+// DELETE product with the given id
 server.del('/products/:id', function (req, res, next) {
 
   // Delete the product with the persistence engine
@@ -120,6 +90,7 @@ server.del('/products/:id', function (req, res, next) {
 
     // Send a 200 OK response
     res.send()
+    console.log('> products DELETE: product at id %s deleted', req.params.id)
   })
 })
 
