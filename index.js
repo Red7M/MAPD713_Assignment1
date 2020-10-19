@@ -1,6 +1,9 @@
-var SERVER_NAME = 'product-api'
+var SERVER_NAME = 'Products-API (assign01)'
 var PORT = 3009;
 var HOST = '127.0.0.1';
+
+var countGetRequest = 0
+var countPostRequest = 0
 
 
 var restify = require('restify')
@@ -15,9 +18,8 @@ var restify = require('restify')
   console.log('------------------------------------------------------')
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('------------------------------------------------------')
-  console.log('Resources:')
-  console.log(' /products')
-  console.log(' /products/:id')  
+  console.log('Endpoints:')
+  console.log('%s method: GET, POST', server.url)
 })
 
 server
@@ -27,37 +29,20 @@ server
   // Maps req.body to req.params so there is no switching between them
   .use(restify.bodyParser())
 
-// Get all products in the system
+// GET all products in the system
 server.get('/products', function (req, res, next) {
 
   // Find every entity within the given collection
   productsSave.find({}, function (error, products) {
-
+    countGetRequest = countGetRequest + 1
+    console.log('> products GET: received request')
     // Return all of the products in the system
     res.send(products)
+    console.log('Processed Request Count--> Get:%s, Post:%s', countGetRequest, countPostRequest)
   })
 })
 
-// Get a single product by their product id
-server.get('/products/:id', function (req, res, next) {
-
-  // Find a single product by their id within save
-  productsSave.findOne({ _id: req.params.id }, function (error, product) {
-
-    // If there are any errors, pass them to next in the correct format
-    if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-
-    if (product) {
-      // Send the product if no issues
-      res.send(product)
-    } else {
-      // Send 404 header if the product doesn't exist
-      res.send(404)
-    }
-  })
-})
-
-// Create a new product
+// POST a new product
 server.post('/products', function (req, res, next) {
 
   // Make sure product is defined
@@ -81,14 +66,16 @@ server.post('/products', function (req, res, next) {
     category: req.params.category
 	}
 
+  console.log('< products GET: sending response')
   // Create the product using the persistence engine
   productsSave.create( newProduct, function (error, product) {
 
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-
+    countPostRequest = countPostRequest + 1 
     // Send the product if no issues
     res.send(201, product)
+    console.log('Processed Request Count--> Get:%s, Post:%s', countGetRequest, countPostRequest)
   })
 })
 
