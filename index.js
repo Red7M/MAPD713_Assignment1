@@ -1,4 +1,4 @@
-var SERVER_NAME = 'Products-API (assign01)'
+var SERVER_NAME = 'Patient Data (Milestone 02)'
 var PORT = 3009;
 var HOST = '127.0.0.1';
 
